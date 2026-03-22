@@ -346,12 +346,8 @@ footer em { color:var(--purple); font-style:normal; }
 </div>
 
 <script>
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  ✏️  EDIT HERE — one entry per project                       ║
-// ║  repo:  GitHub URL string, or null to hide the button       ║
-// ║  audio: filename string like "song1.mp3", or null for synth ║
-// ║  song:  display name shown in the player                    ║
-// ╚══════════════════════════════════════════════════════════════╝
+  
+ //projects
 var projects = [
   { id:1, title:"Love Jump",
     desc:"A fun and interactive web-based game where players jump over obstacles and collect hearts.",
@@ -381,7 +377,7 @@ var projects = [
   { id:6, title:"Space Photobooth",
     desc:"An interactive photobooth with space-themed UI and effects.",
     stack:["HTML","CSS","JavaScript"],
-    repo:"https://github.com/anushkaraks/space-themed-photobooth",
+    repo:"https://github.com/anushkaraks/photobooth-webapp",
     audio:"song6.mp3", song:"Stardust Drift" },
   { id:7, title:"BusMitra (SIH 2025)",
     desc:"Smart public transport system with real-time tracking and ETA prediction.",
@@ -395,31 +391,19 @@ var projects = [
     audio:"song8.mp3", song:"Window Seat" }
 ];
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  Track duration in seconds (80 = 1m20s)                    ║
-// ╚══════════════════════════════════════════════════════════════╝
 var DURATION = 80;
 
-// ══════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════
 var current = 0, discAngle = 0, isPlaying = false;
 var isDragging = false, lastX = 0, vel = 0, raf = 0;
 var elapsed = 0, timerInterval = null;
 var eqBarEls = [];
 
-// ══════════════════════════════════════════
-//  AUDIO ENGINE
-//  Uses a single persistent <audio> element.
-//  createMediaElementSource is called only
-//  once — reusing it across tracks avoids
-//  the "already connected" browser error.
-// ══════════════════════════════════════════
+
 var audioCtx = null, analyser = null, gainNode = null;
-var audioEl   = null;   // one persistent <audio> element
-var audioSrc  = null;   // one persistent MediaElementSource node
+var audioEl   = null;   
+var audioSrc  = null;   
 var synthNodes = [], synthRunning = false;
-var usingFile  = false; // true = real file, false = synth
+var usingFile  = false; 
 
 function initAudio() {
   if (audioCtx) return;
@@ -558,9 +542,7 @@ function stopAll() {
   else { stopSynth(); }
 }
 
-// ══════════════════════════════════════════
-//  VISUALIZER
-// ══════════════════════════════════════════
+
 var vizRaf;
 function startVisualizer() {
   cancelAnimationFrame(vizRaf);
@@ -589,9 +571,6 @@ function stopVisualizer() {
   document.getElementById('audioRing').style.opacity = '0';
 }
 
-// ══════════════════════════════════════════
-//  VOLUME
-// ══════════════════════════════════════════
 function getVol() { return parseInt(document.getElementById('volSlider').value) / 100; }
 document.getElementById('volSlider').addEventListener('input', function() {
   var v = this.value / 100;
@@ -601,9 +580,7 @@ document.getElementById('volSlider').addEventListener('input', function() {
 });
 function setStatus(msg) { document.getElementById('audioStatus').textContent = msg; }
 
-// ══════════════════════════════════════════
-//  STARS
-// ══════════════════════════════════════════
+
 (function() {
   var canvas = document.getElementById('stars');
   var ctx = canvas.getContext('2d');
@@ -640,9 +617,7 @@ document.addEventListener('mousemove', function(e) {
   }
 })();
 
-// ══════════════════════════════════════════
-//  RENDER CARDS
-// ══════════════════════════════════════════
+
 function renderCards() {
   var c = document.getElementById('carousel');
   c.innerHTML = '';
@@ -662,9 +637,7 @@ function renderCards() {
   });
 }
 
-// ══════════════════════════════════════════
-//  SELECT TRACK
-// ══════════════════════════════════════════
+
 function selectTrack(idx) {
   current = ((idx%projects.length)+projects.length)%projects.length;
   var p = projects[current];
@@ -695,9 +668,7 @@ var autoRaf;
 function startAutoSpin(){(function tick(){discAngle+=0.35;updateDisc();autoRaf=requestAnimationFrame(tick);})();}
 function stopAutoSpin(){cancelAnimationFrame(autoRaf);}
 
-// ══════════════════════════════════════════
-//  PLAY / PAUSE
-// ══════════════════════════════════════════
+
 document.getElementById('playBtn').addEventListener('click', togglePlay);
 function togglePlay() {
   // initAudio must be called inside a user gesture
